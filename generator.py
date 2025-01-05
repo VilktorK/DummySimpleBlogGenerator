@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 from email.utils import formatdate
 import configparser
 import shutil
+from config import get_site_config
 
 # Set up Jinja2 environment
 env = Environment(loader=FileSystemLoader('templates'))
@@ -36,10 +37,56 @@ def copy_images():
             if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.svg')):
                 shutil.copy2(os.path.join('resources', filename), os.path.join('output/images', filename))
 
+def generate_archive_content(posts):
+    content = ""
+    current_year = None
+    for post in posts:
+        year = post['date'].year
+        if year != current_year:
+            if current_year is not None:
+                content += "</ul>"
+            content += f"<h2>{year}</h2><ul>"
+            current_year = year
+        content += f"""<li>
+            <span>{post['date'].strftime('%B %d')}</span> -
+            <a href='{post['url']}'>{post['title']}</a>
+            <div class="tags">
+                {' '.join(f'<a href="/tags/{tag.lower().replace(" ", "-")}.html" class="tag">{tag}</a>' for tag in post['tags'])}
+            </div>
+        </li>"""
+    content += "</ul>"
+    return content
+
+def generate_tags_content(tags):
+    content = "<h2>Tags</h2><ul>"
+    for tag, posts in sorted(tags.items()):
+        content += f"<li><a href='/tags/{tag.lower().replace(' ', '-')}.html'>{tag}</a> ({len(posts)})</li>"
+    content += "</ul>"
+    return content
+
+def generate_rss(posts, site_config):
+    rss = ET.Element("rss", version="2.0")
+    channel = ET.SubElement(rss, "channel")
+
+    ET.SubElement(channel, "title").text = site_config['site_title']
+    ET.SubElement(channel, "description").text = site_config['site_subtitle']
+    ET.SubElement(channel, "link").text = site_config['site_url']
+    ET.SubElement(channel, "lastBuildDate").text = formatdate(localtime=True)
+
+    for post in posts[:10]:  # Include only the 10 most recent posts
+        item = ET.SubElement(channel, "item")
+        ET.SubElement(item, "title").text = post['title']
+        ET.SubElement(item, "link").text = f"{site_config['site_url']}{post['url']}"
+        ET.SubElement(item, "description").text = post['content'][:200] + "..."  # First 200 characters as description
+        ET.SubElement(item, "pubDate").text = formatdate(post['date'].timestamp(), localtime=True)
+        ET.SubElement(item, "guid").text = f"{site_config['site_url']}{post['url']}"
+
+    tree = ET.ElementTree(rss)
+    tree.write("output/rss.xml", encoding="UTF-8", xml_declaration=True)
+
 def generate_site():
-    config = configparser.ConfigParser()
-    config.read('config.cfg')
-    site_url = config['DEFAULT'].get('site_url', 'https://example.com')
+    # Get site configuration
+    site_config = get_site_config()
 
     # Create output directories
     ensure_directory('output')
@@ -48,29 +95,6 @@ def generate_site():
 
     # Copy images from resources to output/images
     copy_images()
-
-    # Site configuration
-    site_config = {
-        'site_title': 'My Blog',
-        'site_subtitle': 'A simple blog about various topics',
-        'site_url': site_url,
-        'header_links': [
-            {'url': '/index.html', 'text': 'Home'},
-            {'url': '/about.html', 'text': 'About'},
-            {'url': '/books.html', 'text': 'Contact'},
-           # {'url': '/games.html', 'text': 'Games'},
-           # {'url': '/music.html', 'text': 'Music'},
-           # {'url': '/videos.html', 'text': 'Videos'},
-           # {'url': '/favorites.html', 'text': 'Favorites'},
-            {'url': '/archive.html', 'text': 'Archive'},
-            {'url': '/tags.html', 'text': 'Tags'},
-        ],
-        'footer_links': [
-            {'url': 'https://twitter.com/', 'text': 'Twitter'},
-            {'url': 'https://github.com/', 'text': 'GitHub'},
-            {'url': '/rss.xml', 'text': 'RSS'},
-        ]
-    }
 
     # Get all markdown files from posts directory
     posts = []
@@ -165,53 +189,6 @@ def generate_site():
 
     # Generate RSS feed
     generate_rss(posts, site_config)
-
-def generate_archive_content(posts):
-    content = ""
-    current_year = None
-    for post in posts:
-        year = post['date'].year
-        if year != current_year:
-            if current_year is not None:
-                content += "</ul>"
-            content += f"<h2>{year}</h2><ul>"
-            current_year = year
-        content += f"""<li>
-            <span>{post['date'].strftime('%B %d')}</span> -
-            <a href='{post['url']}'>{post['title']}</a>
-            <div class="tags">
-                {' '.join(f'<a href="/tags/{tag.lower().replace(" ", "-")}.html" class="tag">{tag}</a>' for tag in post['tags'])}
-            </div>
-        </li>"""
-    content += "</ul>"
-    return content
-
-def generate_tags_content(tags):
-    content = "<h2>Tags</h2><ul>"
-    for tag, posts in sorted(tags.items()):
-        content += f"<li><a href='/tags/{tag.lower().replace(' ', '-')}.html'>{tag}</a> ({len(posts)})</li>"
-    content += "</ul>"
-    return content
-
-def generate_rss(posts, site_config):
-    rss = ET.Element("rss", version="2.0")
-    channel = ET.SubElement(rss, "channel")
-
-    ET.SubElement(channel, "title").text = site_config['site_title']
-    ET.SubElement(channel, "description").text = site_config['site_subtitle']
-    ET.SubElement(channel, "link").text = site_config['site_url']
-    ET.SubElement(channel, "lastBuildDate").text = formatdate(localtime=True)
-
-    for post in posts[:10]:  # Include only the 10 most recent posts
-        item = ET.SubElement(channel, "item")
-        ET.SubElement(item, "title").text = post['title']
-        ET.SubElement(item, "link").text = f"{site_config['site_url']}{post['url']}"
-        ET.SubElement(item, "description").text = post['content'][:200] + "..."  # First 200 characters as description
-        ET.SubElement(item, "pubDate").text = formatdate(post['date'].timestamp(), localtime=True)
-        ET.SubElement(item, "guid").text = f"{site_config['site_url']}{post['url']}"
-
-    tree = ET.ElementTree(rss)
-    tree.write("output/rss.xml", encoding="UTF-8", xml_declaration=True)
 
 if __name__ == '__main__':
     generate_site()
