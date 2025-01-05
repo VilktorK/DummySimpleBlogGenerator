@@ -15,6 +15,8 @@ def get_site_config(): # All contents appear left to right in the final website
         'footer_links': [
             {'url': 'https://twitter.com/', 'text': 'Twitter'},
             {'url': 'https://github.com/', 'text': 'GitHub'},
-            {'url': '/rss.xml', 'text': 'RSS'},
+            {'url': '/rss.xml', 'text': 'RSS'}, # Don't Remove
         ]
     }
+    
+# You actually can remove the entries marked with `# Don't Remove` and they will still generate but links to those pages wont appear in the header of footer anymore. 
