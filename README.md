@@ -24,7 +24,7 @@ pip install markdown Jinja2
 
 ## Initial Setup
 
-1. Configure config.py:
+1. Configure `config.py`:
 - Open `config.py` and modify the default settings:
 ```
   'site_title': 'Your Blog Title'
