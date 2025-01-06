@@ -3,6 +3,8 @@
 A dummy-simple Python script that makes it very easy to create and maintain a static blog using markdown files. 
 Once configured, adding a new post is as simple as creating a new markdown file, writing your new post, and running the script.
 
+[View Demo Site](https://dummysimplebloggenerator.netlify.app)
+
 # Features
 - Completely static html design with zero JavaScript
 - Tag system
