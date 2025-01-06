@@ -7,6 +7,7 @@ Once configured, adding a new post is as simple as creating a new markdown file,
 
 # Features
 - Completely static html design with zero JavaScript
+- Reactive design that scales to all devices
 - Tag system
 - Post archive browser
 - RSS.xml generation
