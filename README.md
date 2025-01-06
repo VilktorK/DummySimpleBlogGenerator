@@ -35,17 +35,17 @@ pip install markdown Jinja2
 2. Configuring the header and footer
 - The Home, Archive, and Tags pages are created automatically
 - By default the only customizable pages are `about.md` and `contact.md` located in the pages directory
-- To create more pages add a new `mynewpage.md` file to the pages directory with the same formatting as `about.md` and `contact.md `
+- To create more pages add a new `nameofnewpagehere.md` file to the pages directory with the same formatting as `about.md` and `contact.md `
 - To this new page appear in the header, add a new entry to `config.py` like this:
 ```
             {'url': '/index.html', 'text': 'Home'},
             {'url': '/about.html', 'text': 'About'},
-            {'url': '/mynewpage.html', 'text': 'My New Page'},
+            {'url': '/nameofnewpagehere.html', 'text': 'My New Page'},
             {'url': '/contact.html', 'text': 'Contact'},
             {'url': '/archive.html', 'text': 'Archive'},
             {'url': '/tags.html', 'text': 'Tags'},
 ```
-- The `mynewpage.md` will automatically become `mynewpage.html` when compiled
+- The `nameofnewpagehere.md` will automatically become `nameofnewpagehere.html` when compiled
 - New footer entries can be added the same way
 
 ## Regular Usage  
