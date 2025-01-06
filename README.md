@@ -1,7 +1,7 @@
 # Dummy Simple Blog Generator
 
-A dummy simple Python script that makes it very easy to create and maintain a static blog using markdown files. 
-Once configured making a new post is as simple as making a new markdown file, writing your new post and running the script.
+A dummy-simple Python script that makes it very easy to create and maintain a static blog using markdown files. 
+Once configured, making a new post is as simple as creating a new markdown file, writing your new post, and running the script.
 
 # Features
 - Completely static html design with zero JavaScript
@@ -13,12 +13,12 @@ Once configured making a new post is as simple as making a new markdown file, wr
 ## Installation
 
 1. Clone the repository:
-```bash
+```
 git clone https://github.com/VilktorK/DummySimpleBlogGenerator
 ```
 
 2. Install Dependencies:
-```bash
+```
 pip install markdown Jinja2
 ```
 
@@ -26,7 +26,7 @@ pip install markdown Jinja2
 
 1. Configure config.py:
 - Open `config.py` and modify the default settings:
-```python
+```
   'site_title': 'Your Blog Title'
   'site_subtitle': 'Your Blog Subtitle'
   'site_url': 'https://yourdomain.com'
@@ -45,7 +45,7 @@ pip install markdown Jinja2
             {'url': '/archive.html', 'text': 'Archive'},
             {'url': '/tags.html', 'text': 'Tags'},
 ```
-- The `mynewpage.md` will automatically be generated as `mynewpage.html` when compiled
+- The `mynewpage.md` will automatically become `mynewpage.html` when compiled
 - New footer entries can be added the same way
 
 ## Regular Usage  
@@ -55,21 +55,19 @@ pip install markdown Jinja2
 - A post must always use this header format for proper indexing:
 ```
 ---
-title: My First Blog Post
+title: My Blog Post Title
 date: 2024-10-16
-tags: [python, blogging, dogs]
+tags: [tagone, tagtwo, tagthree]
 ---
 ```
 
-1. Compiling the site
+2. Compiling the site
 - Simply run `generator.py` and your new blog will be generated in the output folder
 - To add new posts or pages just add them to their corresponding folder and run `generator.py` again 
 
-
 ## Markdown Formatting
- - All formatting is done by the "markdown" python library.
+ - All formatting is handled by the "markdown" python library.
  - https://github.com/Python-Markdown/markdown
- 
 
 ## TODO
- - Images do not yet scale to the page
+ - Images do not yet scale with the page
