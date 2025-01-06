@@ -64,6 +64,7 @@ tags: [tagone, tagtwo, tagthree]
 2. Compiling the site
 - Simply run `generator.py` and your new blog will be generated in the output folder
 - To add new posts or pages just add them to their corresponding folder and run `generator.py` again 
+- You can safely delete the contents of the output directory at any time since your site's actual data is stored in the `pages` and `posts` directories.
 
 ## Markdown Formatting
  - All formatting is handled by the "markdown" python library.
