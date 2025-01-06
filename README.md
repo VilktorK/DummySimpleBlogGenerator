@@ -75,3 +75,4 @@ tags: [tagone, tagtwo, tagthree]
 
 ## TODO
  - Images do not yet scale with the page
+ - Code snippets don't scale either, oops
