@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import os
 import markdown
 from jinja2 import Environment, FileSystemLoader
@@ -17,8 +18,13 @@ env = Environment(loader=FileSystemLoader('templates'))
 def parse_markdown(file_path):
     with open(file_path, 'r') as f:
         content = f.read()
+        
         # Replace image references
         content = re.sub(r'!\[([^\]]*)\]\(resources/([^\)]+)\)', r'![\1](/images/\2)', content)
+        
+        # Remove markdown comments when parsing which as i found out are identical to HTML comments, it took me an hour to find out why random parts of the website weren't rendering.
+        content = re.sub(r'<!--[\s\S]*?-->', '', content)
+        
         md = markdown.Markdown(extensions=['meta'])
         html = md.convert(content)
         return html, md.Meta

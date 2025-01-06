@@ -1,10 +1,10 @@
 ---
-title: My First Blog Post
-date: 2024-10-16
-tags: [python, blogging, dogs]
+title: My Third Blog Post
+date: 2024-11-20
+tags: [sharks, blogging, cats, python]
 ---
 
-# Welcome to My Very First Blog Post
+# Welcome to My Third Blog Post
 
 This is my first blog post using a static site generator.
 
